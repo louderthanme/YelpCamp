@@ -1,0 +1,50 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="row">
+
+    <div class="col-6 offset-3">
+        <h1>New Campground</h1>
+        <form action="/campgrounds" method="POST" novalidate class="validated-form">
+            <div class="mb-3">
+                <label class="form-label" for="title">title</label>
+                <input class="form-control" type="text" id="title" name="campground[title]" required>
+                <div class="valid-feedback">Looks good</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="location">location</label>
+                <input class="form-control" type="text" id="title" name="campground[location]" required>
+                <div class="valid-feedback">Looks good</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="image">Image Url</label>
+                <input class="form-control" type="text" id="image" name="campground[imageUrl]" required>
+                <div class="valid-feedback">Looks good</div>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Campground Price</label>
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">$</span>
+                    <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price"
+                        aria-describedby="price-label" name="campground[price]" required>
+                    <div class="valid-feedback">Looks good</div>
+                    <!-- this price label connects the span and the input, if someone is using a screenreader it can help them know what the field is for-->
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <!---this campground[] allows me to get the appropriate info for the appropriate area from req.body.campground ---->
+                <label class="form-label" for="description">Description</label>
+                <textarea class="form-control" type="text" id="description" name="campground[description]"
+                    required></textarea>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-warning">add campground</button>
+            </div>
+        </form>
+        <a href="/campgrounds">all campgrounds</a>
+    </div>
+</div>
