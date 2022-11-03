@@ -36,11 +36,11 @@
             // Loop over them and prevent submission
             Array.from(forms).forEach(form => {
                 form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
+                    if (!form.checkValidity()) {  // if the form is valid then stop propagation, prevent the default behaviour of the form and stay in that page.
                         event.preventDefault()
                         event.stopPropagation()
                     }
-                    form.classList.add('was-validated')
+                    form.classList.add('was-validated') // add this class to everthing
                 }, false)
             })
         })()
