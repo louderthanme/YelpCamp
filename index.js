@@ -24,6 +24,7 @@ app.set('views', path.join(__dirname, 'views'))
 
 app.use(express.urlencoded({ extended: true })) // this allows me to get req.body in a post request that is usally invisible if it isnt first parsed
 app.use(methodOverride("_method"))//this allows me to force a specific method on, for example, a form that only allows post/get. it could be any string I wanted
+app.use(express.static(path.join(__dirname, 'public'))) // this allows me to start the app from a different directory and have the paths still work as intentende, not pick up new meaning through the context.
 
 
 
