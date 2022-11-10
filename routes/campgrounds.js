@@ -5,8 +5,6 @@ const ExpressError = require('../utils/ExpresError')
 const Campground = require('../models/campground')
 const { campgroundSchema } = require('../schemas')
 
-
-
 const validateCampground = (req, res, next) => {
     const { error } = campgroundSchema.validate(req.body)
     if (error) {
@@ -29,6 +27,7 @@ router.get('/new', (req, res) => {
 router.post('/', validateCampground, catchAsync(async (req, res, next) => {
     const campground = new Campground(req.body.campground);
     await campground.save();
+    req.flash('success', 'Succesfully made a new campground')
     res.redirect(`/campgrounds/${campground._id}`)
 }))
 
