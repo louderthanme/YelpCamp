@@ -25,6 +25,7 @@ router.post('/', validateReview, catchAsync(async (req, res) => {
     console.log(campground)
     campground.reviews.push(review)
     await Promise.all([review.save(), campground.save()])  // awaiting two things at once
+    req.flash('success', `Succesfully added review to ${campground.title}`)
     res.redirect(`/campgrounds/${campground._id}`)
 }))
 
