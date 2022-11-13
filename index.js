@@ -8,6 +8,11 @@ const session = require('express-session')
 const flash = require('connect-flash')
 const methodOverride = require('method-override')
 const ExpressError = require('./utils/ExpresError')
+const passport = require('passport') // regular passports, allows us to plug in multiple strategies for authentication
+const LocalStrategy = require('passport-local')// not passport-local-mongoose, that one's just for the model. This module lets you authenticate using a username and password in your Node.js applications.
+const User = require('./models/user')
+
+
 
 //mongo
 
@@ -19,7 +24,7 @@ async function main() {
 
 //route variables 
 const campgrounds = require('./routes/campgrounds')
-const reviews = require('./routes/reviews')
+const reviews = require('./routes/reviews');
 
 //adjustments
 
@@ -44,13 +49,24 @@ const sessionConfig = {
 app.use(session(sessionConfig))
 app.use(flash())
 
+app.use(passport.initialize())//this initialises passport
+app.use(passport.session())// for persistent login sessions. This HAS to come AFTER the normal app.use(session()) that we have in line 49
+passport.use(new LocalStrategy(User.authenticate()))//requiring User model. Im saying, use the local strategy we downloaded and the authentication method is going to be located int he User model. We didn't actually add it manually to the model it got added via the passport-local-mongoose thingy.
+passport.serializeUser(User.serializeUser())//telling passport how to serialise a user (refers to how we store data in a session)
+passport.deserializeUser(User.deserializeUser())//how to get the user out of that session
+
+
 app.use((req, res, next) => {
     res.locals.success = req.flash('success'); //middleware for predefined messages that are at the moment saved on each of my routes. If there is anything in flash under 'success' I'll have acces to it in an res.locals.success
     res.locals.error = req.flash('error');
     next();
 })
 
-
+app.get('/fakeuser', async (req, res) => {
+    const user = new User({ email: 'ruben@fluent.com', username: 'ruben' });
+    const newUser = await User.register(user, 'secret')//added by passports-local-mongoose, adds a passport to an instance of a user. the user is defined earlier and added into the register method
+    res.send(newUser)
+})
 
 //app routes
 app.use('/campgrounds', campgrounds) // uses the router with the /campgrounds
@@ -72,4 +88,4 @@ app.use((err, req, res, next) => {
 
 app.listen(3000, () => {
     console.log('serving on port 3000')
-})
+}) 

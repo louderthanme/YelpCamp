@@ -1,12 +1,12 @@
 const { string } = require('joi');
 const mongoose = require('mongoose');
-const passportLocalMongoose = require('passport-local-mongoose')
+const passportLocalMongoose = require('passport-local-mongoose')// uses the passport-local-mongoose cause it's a model for our database which is currentyl in mongo.
 const Schema = mongoose.Schema
 
 
 const UserSchema = new Schema({
     email: {
-        type: string,
+        type: String,//NEEDS to be capitalize, will crash the whole app if it isn't.
         required: true,
         unique: true, //not an actual validation tool but it works for now.
     }
