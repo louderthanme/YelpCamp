@@ -1,16 +1,16 @@
 //main
-const express = require('express')
+const express = require('express');
 const app = express();
 const path = require('path')
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate'); // one of many engines used to run/parse ejs. this is the one we want to use rather than the default one
-const session = require('express-session')
-const flash = require('connect-flash')
-const methodOverride = require('method-override')
-const ExpressError = require('./utils/ExpresError')
-const passport = require('passport') // regular passports, allows us to plug in multiple strategies for authentication
-const LocalStrategy = require('passport-local')// not passport-local-mongoose, that one's just for the model. This module lets you authenticate using a username and password in your Node.js applications.
-const User = require('./models/user')
+const session = require('express-session');
+const flash = require('connect-flash');
+const methodOverride = require('method-override');
+const ExpressError = require('./utils/ExpresError');
+const passport = require('passport'); // regular passports, allows us to plug in multiple strategies for authentication
+const LocalStrategy = require('passport-local');// not passport-local-mongoose, that one's just for the model. This module lets you authenticate using a username and password in your Node.js applications.
+const User = require('./models/user');
 
 
 
@@ -23,8 +23,9 @@ async function main() {
 }
 
 //route variables 
-const campgrounds = require('./routes/campgrounds')
-const reviews = require('./routes/reviews');
+const userRoutes = require('./routes/users')
+const campgroundRoutes = require('./routes/campgrounds')
+const reviewRoutes = require('./routes/reviews');
 
 //adjustments
 
@@ -56,9 +57,11 @@ passport.serializeUser(User.serializeUser())//telling passport how to serialise 
 passport.deserializeUser(User.deserializeUser())//how to get the user out of that session
 
 
+//giving access to info added by passport//express-session and saving it on the session.
 app.use((req, res, next) => {
-    res.locals.success = req.flash('success'); //middleware for predefined messages that are at the moment saved on each of my routes. If there is anything in flash under 'success' I'll have acces to it in an res.locals.success
+    res.locals.success = req.flash('success'); //middleware for predefined messages that are at the moment saved on each of my routes. If there is anything in flash under 'success' I'll have access to it in an res.locals.success
     res.locals.error = req.flash('error');
+    res.locals.currentUser = req.user //req.user is addedby passport. I have immediate access to it. It contains deserialized info about the user using the platform at that specific moment. It contains a username and an email.
     next();
 })
 
@@ -68,9 +71,13 @@ app.get('/fakeuser', async (req, res) => {
     res.send(newUser)
 })
 
+
+
+
 //app routes
-app.use('/campgrounds', campgrounds) // uses the router with the /campgrounds
-app.use('/campgrounds/:id/reviews', reviews) // uses the router with the /reviews
+app.use('/', userRoutes) // uses the router with the /users
+app.use('/campgrounds', campgroundRoutes) // uses the router with the /campgrounds
+app.use('/campgrounds/:id/reviews', reviewRoutes) // uses the router with the /reviews
 
 app.get('/', (req, res) => {
     res.render('home')
