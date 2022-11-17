@@ -34,12 +34,17 @@ router.get('/login', (req, res) => {
     res.render('./users/login')
 })
 
-router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), catchAsync(async (req, res) => { //passport.authenticate has different strategies, this is local, it could be through twitter or facebook. The failureFlash adds a flash if it doesnt work and failure redirect redirects you
-    req.flash('success', 'welcome back');
-    console.log(req.session.returntTo)
-    const redirectUrls = req.session.returnTo || '/campgrounds'; // this in case some one just straight clicks the log in button
-    res.redirect(redirectUrls)
-}))
+router.post('/login', passport.authenticate('local', {
+    failureFlash: true,
+    failureRedirect: '/login',
+    keepSessionInfo: true
+}),
+    catchAsync(async (req, res) => { //passport.authenticate has different strategies, this is local, it could be through twitter or facebook. The failureFlash adds a flash if it doesnt work and failure redirect redirects you
+        req.flash('success', 'welcome back');
+        const redirectUrl = req.session.returnTo || '/campgrounds'; // this in case some one just straight clicks the log in button
+        delete req.session.returnTo;
+        res.redirect(redirectUrl)
+    }))
 
 
 router.get('/logout', (req, res, next) => {  // we have a next because logout requires callback function 

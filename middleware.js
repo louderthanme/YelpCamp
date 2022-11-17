@@ -4,9 +4,6 @@ module.exports.isLoggedIn = (req, res, next) => {
         req.session.returnTo = req.originalUrl //i'm adding the originalUrl to the session so that I can redirect the user to where they were tryting to go when they were prompted to either log in or register.
         req.flash('error', 'you must be signed in first')
         return res.redirect('/login') // I need to return this to escape the function. if I dont ill get a setHeader error because res.redirect will run as will the res.render right below
-
-
-
     }
     next();
 }
