@@ -65,15 +65,6 @@ app.use((req, res, next) => {
     next();
 })
 
-app.get('/fakeuser', async (req, res) => {
-    const user = new User({ email: 'ruben@fluent.com', username: 'ruben' });
-    const newUser = await User.register(user, 'secret')//added by passports-local-mongoose, adds a passport to an instance of a user. the user is defined earlier and added into the register method
-    res.send(newUser)
-})
-
-
-
-
 //app routes
 app.use('/', userRoutes) // uses the router with the /users
 app.use('/campgrounds', campgroundRoutes) // uses the router with the /campgrounds
@@ -82,6 +73,15 @@ app.use('/campgrounds/:id/reviews', reviewRoutes) // uses the router with the /r
 app.get('/', (req, res) => {
     res.render('home')
 })
+
+// app.use((req, res, next) => {
+//     if (
+//         !["/login", "/register"].includes(req.originalUrl) &&
+//         req.method == "GET") {
+//         req.session.lastGetRequest = req.originalUrl;
+//     }
+//     next();
+// });  --- option of redirecting properly on any request thats not a get request
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404))

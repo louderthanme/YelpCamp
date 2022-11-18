@@ -24,7 +24,15 @@ router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res, nex
 }))
 
 router.get('/:id', catchAsync(async (req, res) => {
-    const campground = await Campground.findById(req.params.id).populate('reviews').populate('author'); //this gives me access to usable info from this fields in the campground model. Not their objectId but the actual data.
+    const campground = await Campground.findById(req.params.id)
+        .populate({
+            path: 'reviews', //this is what we are achieving in one line in populate('author')
+            populate: {
+                path: 'author'//Then I nest it to populate again but with a diff path, this time author, present on our reviews model
+            }
+        })
+        .populate('author');
+    //this gives me access to usable info from this fields in the campground model. Not their objectId but the actual data.
     if (!campground) {
         req.flash('error', 'Cannot find that campground')
         return res.redirect('/campgrounds')

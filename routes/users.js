@@ -33,16 +33,16 @@ router.get('/login', (req, res) => {
     res.render('./users/login')
 })
 
-router.post('/login', passport.authenticate('local', {
+router.post('/login', passport.authenticate('local', { //passport.authenticate has different strategies, this is local, it could be through twitter or facebook. The failureFlash adds a flash if it doesnt work and failure redirect redirects you
     failureFlash: true,
     failureRedirect: '/login',
     keepSessionInfo: true
 }),
-    catchAsync(async (req, res) => { //passport.authenticate has different strategies, this is local, it could be through twitter or facebook. The failureFlash adds a flash if it doesnt work and failure redirect redirects you
+    catchAsync(async (req, res) => {
         req.flash('success', 'welcome back');
         const redirectUrl = req.session.returnTo || '/campgrounds'; // this in case some one just straight clicks the log in button
         delete req.session.returnTo;
-        res.redirect(redirectUrl)
+        res.redirect(307, redirectUrl)
     }))
 
 
