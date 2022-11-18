@@ -30,7 +30,6 @@ router.post('/register', catchAsync(async (req, res) => { //the catch async send
 
 
 router.get('/login', (req, res) => {
-    console.log(req.session.returntTo)
     res.render('./users/login')
 })
 

@@ -27,13 +27,15 @@ router.get('/new', isLoggedIn, (req, res) => {
 
 router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res, next) => {
     const campground = new Campground(req.body.campground);
+    campground.author = req.user._id;
     await campground.save();
     req.flash('success', 'Succesfully made a new campground')
     res.redirect(`/campgrounds/${campground._id}`)
 }))
 
 router.get('/:id', catchAsync(async (req, res) => {
-    const campground = await Campground.findById(req.params.id).populate('reviews');
+    const campground = await Campground.findById(req.params.id).populate('reviews').populate('author'); //this gives me access to usable info from this fields in the campground model. Not their objectId but the actual data.
+    console.log(campground)
     if (!campground) {
         req.flash('error', 'Cannot find that campground')
         return res.redirect('/campgrounds')

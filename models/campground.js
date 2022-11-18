@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Review = require('./review');  //pasing in the review model so that when deleting the middleware knows wtf a review is.
+const User = require('./user')
 const Schema = mongoose.Schema
 
 const CampgroundSchema = new Schema({
@@ -8,6 +9,10 @@ const CampgroundSchema = new Schema({
     description: String,
     location: String,
     imageUrl: String,
+    author: {
+        type: Schema.Types.ObjectId, //this is telling me that an objectId belongs here and that we are going to source it from: User, which I'm requiring up top.
+        ref: 'User'
+    },
     reviews: [
         {
             type: Schema.Types.ObjectId,

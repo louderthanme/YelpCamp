@@ -9,6 +9,7 @@ main().catch(err => console.log(`oh no mongo ${err}`));
 async function main() {
     await mongoose.connect('mongodb://localhost:27017/yelp-camp');
     console.log('database from seeds index connnected');
+    console.log('please wait');
 }
 
 const sample = (array) => array[Math.floor(Math.random() * array.length)];
@@ -40,7 +41,7 @@ const seedDB = async () => {
 
         // seed data into campground
         const camp = new Campground({
-
+            author: '63740e54842e66403ae89ec5',
             title: `${descriptors[descriptorsSeed]} ${places[placeSeed]}`,
             location: `${cities[citySeed].city}, ${cities[citySeed].state}`,
             imageUrl: await seedImg(),
