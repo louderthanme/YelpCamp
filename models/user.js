@@ -1,4 +1,3 @@
-const { string } = require('joi');
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose')// uses the passport-local-mongoose cause it's a model for our database which is currentyl in mongo.
 const Schema = mongoose.Schema

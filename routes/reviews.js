@@ -1,28 +1,17 @@
 const express = require('express')
 const router = express.Router({ mergeParams: true }); //gives me access to params caught in app.use in /index
-const catchAsync = require('../utils/catchAsync')
-const ExpressError = require('../utils/ExpresError')
-const { reviewSchema } = require('../schemas')
 const Campground = require('../models/campground')
 const Review = require('../models/review')
+const { validateReview } = require('../middleware')
 
-const validateReview = (req, res, next) => {
-    const { error } = reviewSchema.validate(req.body)
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
+const ExpressError = require('../utils/ExpresError')
+const catchAsync = require('../utils/catchAsync')
+
 
 
 router.post('/', validateReview, catchAsync(async (req, res) => {
-    console.log(req.params.id)
     const campground = await Campground.findById(req.params.id);
-    console.log(campground)
     const review = new Review(req.body.review)
-    console.log(campground)
     campground.reviews.push(review)
     await Promise.all([review.save(), campground.save()])  // awaiting two things at once
     req.flash('success', `Succesfully added review to ${campground.title}`)

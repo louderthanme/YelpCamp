@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Review = require('./review');  //pasing in the review model so that when deleting the middleware knows wtf a review is.
-const User = require('./user')
 const Schema = mongoose.Schema
 
 const CampgroundSchema = new Schema({
