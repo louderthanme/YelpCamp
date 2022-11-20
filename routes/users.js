@@ -6,18 +6,17 @@ const catchAsync = require('../utils/catchAsync');
 const User = require('../models/user');
 
 
-router.get('/register', users.renderRegister)
+router.route('/register')
+    .get(users.renderRegister)
+    .post(catchAsync(users.register))
 
-router.post('/register', catchAsync(users.register))
-
-
-router.get('/login', users.renderLogin)
-
-router.post('/login', passport.authenticate('local', { //passport.authenticate has different strategies, this is local, it could be through twitter or facebook. The failureFlash adds a flash if it doesnt work and failure redirect redirects you
-    failureFlash: true,
-    failureRedirect: '/login',
-    keepSessionInfo: true
-}), catchAsync(users.login))
+router.route('/login')
+    .get(users.renderLogin)
+    .post(passport.authenticate('local', { //passport.authenticate has different strategies, this is local, it could be through twitter or facebook. The failureFlash adds a flash if it doesnt work and failure redirect redirects you
+        failureFlash: true,
+        failureRedirect: '/login',
+        keepSessionInfo: true
+    }), catchAsync(users.login));
 
 router.get('/logout', users.logout);
 
