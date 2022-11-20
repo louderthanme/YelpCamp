@@ -1,67 +1,25 @@
 const express = require('express')
 const router = express.Router();
+const campgrounds = require('../controllers/campgrounds') //this gives me access to a campgrounds object with a bunch of methods on it.
 const catchAsync = require('../utils/catchAsync')
 const { isLoggedIn, isAuthor, validateCampground } = require('../middleware')
 
 const Campground = require('../models/campground')
 
 
-router.get('/', catchAsync(async (req, res) => {
-    const campgrounds = await Campground.find({});
-    res.render('./campgrounds/index', { campgrounds })
-}))
+router.get('/', catchAsync(campgrounds.index))
 
-router.get('/new', isLoggedIn, (req, res) => {
-    res.render('./campgrounds/new')
-})
+router.get('/new', isLoggedIn, campgrounds.renderNewForm)
 
-router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res, next) => {
-    const campground = new Campground(req.body.campground);
-    campground.author = req.user._id;
-    await campground.save();
-    req.flash('success', 'Succesfully made a new campground')
-    res.redirect(`/campgrounds/${campground._id}`)
-}))
+router.post('/', isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground))
 
-router.get('/:id', catchAsync(async (req, res) => {
-    const campground = await Campground.findById(req.params.id)
-        .populate({
-            path: 'reviews', //this is what we are achieving in one line in populate('author')
-            populate: {
-                path: 'author'//Then I nest it to populate again but with a diff path, this time author, present on our reviews model
-            }
-        })
-        .populate('author');
-    //this gives me access to usable info from this fields in the campground model. Not their objectId but the actual data.
-    if (!campground) {
-        req.flash('error', 'Cannot find that campground')
-        return res.redirect('/campgrounds')
-    }
-    res.render('./campgrounds/show', { campground })
-}))
+router.get('/:id', catchAsync(campgrounds.showCampground))
 
-router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
-    const { id } = req.params
-    const campground = await Campground.findById(id);
-    if (!campground) {
-        req.flash('error', 'Cannot find that campground')
-        return res.redirect('/campgrounds')
-    }
-    res.render(`./campgrounds/edit`, { campground })
-}))
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(campgrounds.editCampground))
 
-router.put('/:id', isLoggedIn, isAuthor, validateCampground, catchAsync(async (req, res) => {
-    const { id } = req.params
-    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground }) // In an object literal, the spread (...) syntax enumerates the properties of an object and adds the key-value pairs to the object being created. they make a javascript object into an object that mongoose can accept
-    req.flash('success', 'Succesfully updated campground')
-    res.redirect(`./${campground.id}`)
-}))
+router.put('/:id', isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.updateCampground))
 
-router.delete('/:id', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
-    const { id } = req.params
-    await Campground.findByIdAndDelete(id)
-    res.redirect('/campgrounds')
-}))
+router.delete('/:id', isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground))
 
 
 module.exports = router;

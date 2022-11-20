@@ -42,7 +42,7 @@ router.post('/login', passport.authenticate('local', { //passport.authenticate h
         req.flash('success', 'welcome back');
         const redirectUrl = req.session.returnTo || '/campgrounds'; // this in case some one just straight clicks the log in button
         delete req.session.returnTo;
-        res.redirect(307, redirectUrl)
+        res.redirect(redirectUrl)
     }))
 
 
