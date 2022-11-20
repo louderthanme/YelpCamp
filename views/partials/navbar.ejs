@@ -16,7 +16,7 @@
                 <!-- this is checking if this variable is present in res.locals. I made this equal to req.user in the app.use with all the locals  -->
                 <% if(!currentUser) { %>
                 <a class="nav-link" aria-current="page" href="/login"> Log in</a>
-                <a class="nav-link" aria-current="page" href="/register"> Resgister</a>
+                <a class="nav-link" aria-current="page" href="/register"> Register</a>
                 <% } else { %>
                 <a class="nav-link" aria-current="page" href="/logout"> <%= currentUser.username %>, log out</a>
                 <% } %>
