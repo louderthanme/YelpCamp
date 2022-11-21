@@ -1,26 +1,31 @@
 <% layout('layouts/boilerplate') %>
 
 <div class="row">
+    <h1 class="text-center">New Campground</h1>
 
     <div class="col-6 offset-3">
-        <h1>New Campground</h1>
-        <form action="." method="POST" novalidate class="validated-form">
+        <form action="." method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+
+            <!-- Title -->
             <div class="mb-3">
                 <label class="form-label" for="title">title</label>
                 <input class="form-control" type="text" id="title" name="campground[title]" required>
                 <div class="valid-feedback">Looks good</div>
             </div>
+            <!-- location -->
             <div class="mb-3">
                 <label class="form-label" for="location">location</label>
                 <input class="form-control" type="text" id="title" name="campground[location]" required>
                 <div class="valid-feedback">Looks good</div>
             </div>
-
-            <div class="mb-3">
+            <!-- image -->
+            <input type="file" name="image" id="image">
+            <!-- <div class="mb-3">
                 <label class="form-label" for="image">Image Url</label>
                 <input class="form-control" type="text" id="image" name="campground[imageUrl]" required>
                 <div class="valid-feedback">Looks good</div>
-            </div>
+            </div> -->
+            <!-- price -->
             <div class="mb-3">
                 <label for="price" class="form-label">Campground Price</label>
                 <div class="input-group">
@@ -31,6 +36,7 @@
                     <!-- this price label connects the span and the input, if someone is using a screenreader it can help them know what the field is for-->
                 </div>
             </div>
+            <!-- description -->
 
             <div class="mb-3">
                 <!---this campground[] allows me to get the appropriate info for the appropriate area from req.body.campground ---->
