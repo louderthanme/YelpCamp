@@ -1,3 +1,9 @@
+if (process.env.NODE_ENV !== 'production') { //process.env.node_env is an environment variable, we can run our coude in production or in development, this says if we are in production/developement mode. This says, if we are NOT in production mode, i.e. we are on development mode as we are by default, then give us access to the stuff inside this file
+    require('dotenv').config(); //this gives me access to the key-value pairs defined in the .env file .// this is temporal, when in production we just set this variable as available to the environment.
+}
+
+
+
 //main
 const express = require('express');
 const app = express();
@@ -11,6 +17,9 @@ const ExpressError = require('./utils/ExpresError');
 const passport = require('passport'); // regular passports, allows us to plug in multiple strategies for authentication
 const LocalStrategy = require('passport-local');// not passport-local-mongoose, that one's just for the model. This module lets you authenticate using a username and password in your Node.js applications.
 const User = require('./models/user');
+
+const multer = require('multer') //middleware to handle multipart/farm-data in our forms
+const upload = multer({ dest: 'uploads/' }) //where the file will be saved, at the moment it's on this folder, irl you wouldn't save it on a computer you'd upload it to a server
 
 
 
