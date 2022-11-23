@@ -6,17 +6,18 @@ const { isLoggedIn, isAuthor, validateCampground } = require('../middleware')
 
 const Campground = require('../models/campground')
 
+const { storage } = require('../cloudinary') // no need to add/  index because node automatically looks for an index file.
 const multer = require('multer') //middleware to handle multipart/farm-data in our forms
-const upload = multer({ dest: 'uploads/' }) //where the file will be saved, at the moment it's on this folder, irl you wouldn't save it on a computer you'd upload it to a server
+const upload = multer({ storage }) //where the file will be saved, at the moment it's on this folder, irl you wouldn't save it on a computer you'd upload it to a server
 
 
 router.route('/')
     .get(catchAsync(campgrounds.index))
-    .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground))
-// .post(upload.array('image'), (req, res) => {
-//     console.log(req.body, req.files)
-//     res.send('it worked')
-// })
+    // .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground))
+    .post(upload.array('image'), (req, res) => {
+        console.log(req.body, req.files)
+        res.send('it worked')
+    })
 
 router.get('/new', isLoggedIn, campgrounds.renderNewForm)
 
