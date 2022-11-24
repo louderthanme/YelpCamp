@@ -13,11 +13,8 @@ const upload = multer({ storage }) //where the file will be saved, at the moment
 
 router.route('/')
     .get(catchAsync(campgrounds.index))
-    // .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground))
-    .post(upload.array('image'), (req, res) => {
-        console.log(req.body, req.files)
-        res.send('it worked')
-    })
+    .post(isLoggedIn, upload.array('image'), validateCampground, catchAsync(campgrounds.createCampground)) //the upload.array is from cloudinary. It's called 'image' because that's the name I specified on the field of the form where we make a new campground
+
 
 router.get('/new', isLoggedIn, campgrounds.renderNewForm)
 

@@ -4,10 +4,15 @@ const Schema = mongoose.Schema
 
 const CampgroundSchema = new Schema({
     title: String,
+    images: [
+        {
+            url: String,
+            filename: String
+        }
+    ],
     price: Number,
     description: String,
     location: String,
-    imageUrl: String,
     author: {
         type: Schema.Types.ObjectId, //this is telling me that an objectId belongs here and that we are going to source it from: User, which I'm requiring up top.
         ref: 'User'
