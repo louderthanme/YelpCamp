@@ -1,4 +1,5 @@
 const Campground = require('../models/campground')
+const { cloudinary } = require('../cloudinary')
 
 module.exports.index = async (req, res) => {
     const campgrounds = await Campground.find({});
@@ -32,7 +33,6 @@ module.exports.showCampground = async (req, res) => {
         req.flash('error', 'Cannot find that campground')
         return res.redirect('/campgrounds')
     }
-    console.log(campground.images)
     res.render('./campgrounds/show', { campground })
 }
 
@@ -50,9 +50,20 @@ module.exports.editCampground = async (req, res) => {
 module.exports.updateCampground = async (req, res) => {
     const { id } = req.params
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground }) // In an object literal, the spread (...) syntax enumerates the properties of an object and adds the key-value pairs to the object being created. they make a javascript object into an object that mongoose can accept
+    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }))//Push because unlike creating a new campground you don't want to override all files, just add on to it. It's in a different variable because .map returns an array, and pushing an array unto another array wouldn't quite work.
+    campground.images.push(...imgs) // then we spread said array so that it can be passed in as key:value pairs individually
+    await campground.save()
+    if (req.body.deleteImages) {
+        for (let filename of req.body.deleteImages) {
+            await cloudinary.uploader.destroy(filename)
+        }
+        await campground.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } }) //if theres something in my deleteImages part of rq body, then updateOne by pulling from the images we have any file with a filename that is in the req.body.deleteimages// PAY ATTENTION TO CAPITALIZATION  in req.body
+    }
     req.flash('success', 'Succesfully updated campground')
     res.redirect(`./${campground.id}`)
 }
+
+
 module.exports.deleteCampground = async (req, res) => {
     const { id } = req.params
     await Campground.findByIdAndDelete(id)

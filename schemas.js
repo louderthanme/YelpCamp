@@ -7,7 +7,8 @@ module.exports.campgroundSchema = Joi.object({
         // imageUrl: Joi.string().required(),
         location: Joi.string().required(),
         description: Joi.string().required()
-    }).required()
+    }).required(),
+    deleteImages: Joi.array() // this allows me to deleteimages my checking them. The name is what I called it on the form
 });
 
 module.exports.reviewSchema = Joi.object({

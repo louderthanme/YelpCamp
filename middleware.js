@@ -4,7 +4,6 @@ const Campground = require('./models/campground')
 const Review = require('./models/review')
 
 
-
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) { //this method is added by passport to my request object. I am not even requiring campground with this route. My request has this method because I used app.use(passport.initialize()), app.use(passport.session()), and passport.use(new LocalStrategy(User.authenticate())). This was back in my index file
         req.session.returnTo = req.originalUrl //i'm adding the originalUrl to the session so that I can redirect the user to where they were tryting to go when they were prompted to either log in or register. -
@@ -54,3 +53,5 @@ module.exports.validateReview = (req, res, next) => {
         next();
     }
 }
+
+

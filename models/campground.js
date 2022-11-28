@@ -2,14 +2,20 @@ const mongoose = require('mongoose');
 const Review = require('./review');  //pasing in the review model so that when deleting the middleware knows wtf a review is.
 const Schema = mongoose.Schema
 
+// https://res.cloudinary.com/drrtkq22t/image/upload/w_300/v1669248091/Yelp%20Camp/a2ifaak999qyqfa5b5n9.jpg
+
+const ImageSchema = new Schema({
+    url: String,
+    filename: String
+})
+
+ImageSchema.virtual('thumbnail').get(function () { //virtuals allow me to add properties to a schema without actually adding them to the database. We are deriving it from info in the database already. No need to duplicate info.
+    return this.url.replace('/upload', '/upload/h_300')
+})
+
 const CampgroundSchema = new Schema({
     title: String,
-    images: [
-        {
-            url: String,
-            filename: String
-        }
-    ],
+    images: [ImageSchema],
     price: Number,
     description: String,
     location: String,
