@@ -16,6 +16,17 @@ ImageSchema.virtual('thumbnail').get(function () { //virtuals allow me to add pr
 const CampgroundSchema = new Schema({
     title: String,
     images: [ImageSchema],
+    geometry: {
+        "type": {
+            type: String, // could be linestring, polygon, multipoint, point, etc
+            enum: ['Point'], // enum is how we provide different options, if it only has one type in there, in this case point, i'm saying the type hast o be this one in particular
+            required: true
+        },
+        coordinates: {
+            type: [Number], //array of numbers.
+            required: true
+        }
+    },
     price: Number,
     description: String,
     location: String,

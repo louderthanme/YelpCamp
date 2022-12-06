@@ -1,4 +1,8 @@
 const Campground = require('../models/campground')
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding") //mapbox requirement could be other service, could require more than one 
+const mapBoxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({ accessToken: mapBoxToken }) // this has the methods we want, forward and reverse geocode.
+
 const { cloudinary } = require('../cloudinary')
 
 module.exports.index = async (req, res) => {
@@ -11,10 +15,16 @@ module.exports.renderNewForm = (req, res) => {
 }
 
 module.exports.createCampground = async (req, res, next) => {
+    const geoData = await geocoder.forwardGeocode({
+        query: req.body.campground.location, // this particular name for our location comes from what we named each lil bit on the form
+        limit: 1
+    }).send()
     const campground = new Campground(req.body.campground);
-    campground.images = req.files.map(f => ({ url: f.path, filename: f.filename })) //for each file return an object with the data.
+    campground.geometry = geoData.body.features[0].geometry;
+    campground.images = req.files.length ? req.files.map(f => ({ url: f.path, filename: f.filename })) : { url: 'https://res.cloudinary.com/drrtkq22t/image/upload/v1670364997/Yelp%20Camp/No_Image_Available_dcvsug.jpg', filename: 'Yelp Camp/No_Image_Available_dcvsug.jpg' } //for each file return an object with the data.
     campground.author = req.user._id;
     await campground.save();
+    console.log(campground.images)
     req.flash('success', 'Succesfully made a new campground')
     res.redirect(`/campgrounds/${campground._id}`)
 }

@@ -41,14 +41,15 @@ const seedDB = async () => {
 
         // seed data into campground
         const camp = new Campground({
-            author: '63740e54842e66403ae89ec5',
+            author: '63740e54842e66403ae89ec5', // your user ID
             title: `${descriptors[descriptorsSeed]} ${places[placeSeed]}`,
             location: `${cities[citySeed].city}, ${cities[citySeed].state}`,
+            geometry: { type: 'Point', coordinates: [-113.133115, 47.020078] },
             images:
                 [
                     {
-                        url: 'https://res.cloudinary.com/drrtkq22t/image/upload/v1669248091/Yelp%20Camp/a2ifaak999qyqfa5b5n9.jpg',
-                        filename: 'Yelp Camp/a2ifaak999qyqfa5b5n9',
+                        url: 'https://res.cloudinary.com/drrtkq22t/image/upload/v1669248091/Yelp%20Camp/13_m9a4x6.jpg',
+                        filename: 'Yelp Camp/13_m9a4x6.jpg',
                     },
                     {
                         url: 'https://res.cloudinary.com/drrtkq22t/image/upload/v1669248093/Yelp%20Camp/tqyjafqbf1ivdvvigisv.jpg',
