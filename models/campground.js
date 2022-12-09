@@ -13,6 +13,10 @@ ImageSchema.virtual('thumbnail').get(function () { //virtuals allow me to add pr
     return this.url.replace('/upload', '/upload/h_300')
 })
 
+const opts = { toJSON: { virtuals: true } };  // doing this becaue mongo by default doesnt return the virtuals on the result object when making them into JSON, so in im setting them to appear with this opts variable which I'll then add on the schema
+
+
+
 const CampgroundSchema = new Schema({
     title: String,
     images: [ImageSchema],
@@ -40,6 +44,10 @@ const CampgroundSchema = new Schema({
             ref: 'Review'
         }
     ]
+}, opts); // this is the options that set the virtuals as available in the result object after stringifyingin them // jsoninfyinghtme
+
+CampgroundSchema.virtual('properties.popUpMarkup').get(function () { //virtuals allow me to add properties to a schema without actually adding them to the database. We are deriving it from info in the database already. No need to duplicate info.
+    return `<a href="/campgrounds/${this._id}">${this.title}</a>`
 })
 
 //I'm adding this post hook inside the campgroundschema before compiling it to say: when involved with this particulary model (campground.js) anytime this following middleware is triggered (findOneAndDelete) do the following. This middleware is triggered by the method  findByIdAndDelete. It's that one specifically just because in my delete route in my index I specified I wanted to use that one. Which means that if I used with a different method to delete it then I would have to change this post hook because the middleware that other hypothetical way I'm deleting would probably trigger a different

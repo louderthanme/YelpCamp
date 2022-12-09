@@ -32,7 +32,7 @@ async function seedImg() {
 
 const seedDB = async () => {
     await Campground.deleteMany({});
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 500; i++) {
         // setup
         const placeSeed = Math.floor(Math.random() * places.length);
         const descriptorsSeed = Math.floor(Math.random() * descriptors.length);
@@ -44,7 +44,13 @@ const seedDB = async () => {
             author: '63740e54842e66403ae89ec5', // your user ID
             title: `${descriptors[descriptorsSeed]} ${places[placeSeed]}`,
             location: `${cities[citySeed].city}, ${cities[citySeed].state}`,
-            geometry: { type: 'Point', coordinates: [-113.133115, 47.020078] },
+            geometry: {
+                type: 'Point',
+                coordinates: [
+                    cities[citySeed].longitude,
+                    cities[citySeed].latitude,
+                ]
+            },
             images:
                 [
                     {
