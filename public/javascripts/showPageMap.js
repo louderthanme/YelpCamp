@@ -5,6 +5,7 @@ const map = new mapboxgl.Map({
     center: campground.geometry.coordinates, // starting position [lng, lat] -- getting campground here the same way I got mapToken. The problems are false positives
     zoom: 15, // starting zoom
 });
+map.addControl(new mapboxgl.NavigationControl());
 
 const marker = new mapboxgl.Marker({ color: 'red', rotation: 45 })
     .setLngLat(campground.geometry.coordinates)

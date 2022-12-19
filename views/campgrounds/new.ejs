@@ -2,67 +2,70 @@
 <link rel="stylesheet" href="/stylesheets/images.css" class="rel">
 
 <div class="row">
-    <h1 class="text-center">New Campground</h1>
+  <h1 class="text-center">New Campground</h1>
 
-    <div class="col-6 offset-3">
+  <div class="col-6 offset-3">
+    <div class="card shadow">
+      <div class="card-body">
+
         <form action="." method="POST" novalidate class="validated-form" enctype="multipart/form-data">
 
-            <!-- Title -->
-            <div class="mb-3">
-                <label class="form-label" for="title">title</label>
-                <input class="form-control" type="text" id="title" name="campground[title]" required>
-                <div class="valid-feedback">Looks good</div>
+          <!-- Title -->
+          <div class="mb-3">
+            <label class="form-label" for="title">title</label>
+            <input class="form-control" type="text" id="title" name="campground[title]" required>
+            <div class="valid-feedback">Looks good</div>
+          </div>
+          <!-- location -->
+          <div class="mb-3">
+            <label class="form-label" for="location">location</label>
+            <input class="form-control" type="text" id="title" name="campground[location]" required>
+            <div class="valid-feedback">Looks good</div>
+          </div>
+
+          <!-- price -->
+
+          <div class="mb-3">
+            <label for="price" class="form-label">Campground Price</label>
+            <div class="input-group">
+              <span class="input-group-text" id="basic-addon1">$</span>
+              <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price" aria-describedby="price-label" name="campground[price]" required>
+              <div class="valid-feedback">Looks good</div>
+              <!-- this price label connects the span and the input, if someone is using a screenreader it can help them know what the field is for-->
             </div>
-            <!-- location -->
-            <div class="mb-3">
-                <label class="form-label" for="location">location</label>
-                <input class="form-control" type="text" id="title" name="campground[location]" required>
-                <div class="valid-feedback">Looks good</div>
+          </div>
+          <!-- description -->
+
+          <div class="mb-3">
+            <!---this campground[] allows me to get the appropriate info for the appropriate area from req.body.campground ---->
+            <label class="form-label" for="description">Description</label>
+            <textarea class="form-control" type="text" id="description" name="campground[description]" required></textarea>
+            <div class="valid-feedback">
+              Looks good!
             </div>
+          </div>
 
-            <!-- price -->
+          <!-- image -->
 
-            <div class="mb-3">
-                <label for="price" class="form-label">Campground Price</label>
-                <div class="input-group">
-                    <span class="input-group-text" id="basic-addon1">$</span>
-                    <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price"
-                        aria-describedby="price-label" name="campground[price]" required>
-                    <div class="valid-feedback">Looks good</div>
-                    <!-- this price label connects the span and the input, if someone is using a screenreader it can help them know what the field is for-->
-                </div>
+          <div class="mb-3">
+            <label class="form-label">Choose Image(s)</label>
+            <div class="form-file custom-file">
+              <input class="form-control custom-file-input" type="file" id="image" name="image" multiple onchange="previewMultiple(event)">
+              <label for="image" class="form-label custom-file-label"></label>
             </div>
-            <!-- description -->
-
-            <div class="mb-3">
-                <!---this campground[] allows me to get the appropriate info for the appropriate area from req.body.campground ---->
-                <label class="form-label" for="description">Description</label>
-                <textarea class="form-control" type="text" id="description" name="campground[description]"
-                    required></textarea>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-            </div>
-
-            <!-- image -->
-
-            <div class="mb-3">
-                <label class="form-label">Choose Image(s)</label>
-                <div class="form-file custom-file">
-                    <input class="form-control custom-file-input" type="file" id="image" name="image" multiple
-                        onchange="previewMultiple(event)">
-                    <label for="image" class="form-label custom-file-label"></label>
-                </div>
-                <div id="formFile"></div>
-                <div class="valid-feedback">looks good!</div>
-            </div>
+            <div id="formFile"></div>
+            <div class="valid-feedback">looks good!</div>
+          </div>
 
 
-            <!-- submit button--->
-            <div class="mb-3">
-                <button class="btn btn-warning">add campground</button>
-            </div>
+          <!-- submit button--->
+          <div class="mb-3">
+            <button class="btn btn-warning">add campground</button>
+          </div>
         </form>
         <a href="/campgrounds">all campgrounds</a>
+      </div>
     </div>
+
+  </div>
 </div>

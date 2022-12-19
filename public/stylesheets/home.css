@@ -18,11 +18,12 @@ body {
     font-weight: 500;
     color: rgba(255, 255, 255, 0.6);
     margin-left: 1rem;
-    border-bottom: 0.25rem solid transparent;
+    border-bottom: 0.1rem solid transparent;
 }
 
 .nav-link.active {
     color: white;
+    border-bottom-color: white;
 }
 
 .nav-link:hover {
