@@ -48,7 +48,7 @@ app.use(methodOverride("_method"));//this allows me to force a specific method o
 app.use(express.static(path.join(__dirname, 'public'))); // this allows me to start the app from a different directory and have the paths still work as intentende, not pick up new meaning through the context.
 app.use(mongoSanitize({
     replaceWith: '_'
-})); //package used to sanitize things entered into fields that could be used to inject some mongo
+})); //package used to sanitize things entered into fields that could be used to inject some mongo, replaces $ with _
 
 helmet({})
 
