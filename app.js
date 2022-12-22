@@ -17,7 +17,8 @@ const ExpressError = require('./utils/ExpressError');
 const passport = require('passport'); // regular passports, allows us to plug in multiple strategies for authentication
 const LocalStrategy = require('passport-local');// not passport-local-mongoose, that one's just for the model. This module lets you authenticate using a username and password in your Node.js applications.
 const User = require('./models/user');
-const mongoSanitize = require('express-mongo-sanitize')
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
 
 
 const multer = require('multer') //middleware to handle multipart/farm-data in our forms
@@ -38,23 +39,27 @@ const reviewRoutes = require('./routes/reviews');
 
 //adjustments
 
-app.engine('ejs', ejsMate)
+app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'))
+app.set('views', path.join(__dirname, 'views'));
 
-app.use(express.urlencoded({ extended: true })) // this allows me to get req.body in a post request that is usally invisible if it isnt first parsed
-app.use(methodOverride("_method"))//this allows me to force a specific method on, for example, a form that only allows post/get. it could be any string I wanted
-app.use(express.static(path.join(__dirname, 'public'))) // this allows me to start the app from a different directory and have the paths still work as intentende, not pick up new meaning through the context.
+app.use(express.urlencoded({ extended: true })); // this allows me to get req.body in a post request that is usally invisible if it isnt first parsed
+app.use(methodOverride("_method"));//this allows me to force a specific method on, for example, a form that only allows post/get. it could be any string I wanted
+app.use(express.static(path.join(__dirname, 'public'))); // this allows me to start the app from a different directory and have the paths still work as intentende, not pick up new meaning through the context.
 app.use(mongoSanitize({
     replaceWith: '_'
 })); //package used to sanitize things entered into fields that could be used to inject some mongo
 
+helmet({})
+
 const sessionConfig = {
+    name: 'session',
     secret: 'secret', //remove deprecation warnings lol-- could be any other string, proabbly not in your main app ever.
     resave: false, //remove deprecation warnings lol
     saveUninitialized: true,  //remove deprecation warnings lol
     cookie: {
         httpOnly: true, //extra security for the cookie, even if accessed by cross site scripting, they wouldn't get the cookie
+        // secure: true, // this one only works with httpS - currently off because we haven't deployed and localhost isn't http
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1000ms times 60s, times 60m, times 24hrs, times 7days - expires in a week.
         maxAge: 1000 * 60 * 60 * 24 * 7,
     }
@@ -72,7 +77,7 @@ passport.deserializeUser(User.deserializeUser())//how to get the user out of tha
 
 //giving access to info added by passport//express-session and saving it on the session.
 app.use((req, res, next) => {
-    console.log(req.query)
+    // console.log(req.query)
     res.locals.success = req.flash('success'); //middleware for predefined messages that are at the moment saved on each of my routes. If there is anything in flash under 'success' I'll have access to it in an res.locals.success
     res.locals.error = req.flash('error');
     res.locals.currentUser = req.user //req.user is addedby passport. I have immediate access to it. It contains deserialized info about the user using the platform at that specific moment. It contains a username and an email.
