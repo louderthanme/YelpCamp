@@ -3,7 +3,6 @@ if (process.env.NODE_ENV !== 'production') { //process.env.node_env is an enviro
 }
 
 
-
 //main
 const express = require('express');
 const app = express();
@@ -23,6 +22,8 @@ const helmet = require('helmet');
 
 const multer = require('multer') //middleware to handle multipart/farm-data in our forms
 const upload = multer({ dest: 'uploads/' }) //where the file will be saved, at the moment it's on this folder, irl you wouldn't save it on a computer you'd upload it to a server
+// const dbUrl = process.env.DB_URL
+// mongoose.connect('mongodb://localhost:27017/yelp-camp');
 
 
 //mongo
