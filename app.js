@@ -18,18 +18,23 @@ const LocalStrategy = require('passport-local');// not passport-local-mongoose, 
 const User = require('./models/user');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
+const MongoStore = require('connect-mongo');
+
 
 
 const multer = require('multer') //middleware to handle multipart/farm-data in our forms
 const upload = multer({ dest: 'uploads/' }) //where the file will be saved, at the moment it's on this folder, irl you wouldn't save it on a computer you'd upload it to a server
-// const dbUrl = process.env.DB_URL
+const dbUrl = 'mongodb://localhost:27017/yelp-camp'
 // mongoose.connect('mongodb://localhost:27017/yelp-camp');
+
+
+// connect- to web
 
 
 //mongo
 main().catch(err => console.log(`oh no mongo ${err}`));
 async function main() {
-    await mongoose.connect('mongodb://localhost:27017/yelp-camp');
+    await mongoose.connect(dbUrl);
     console.log('database from main folder connnected');
 }
 
@@ -53,7 +58,21 @@ app.use(mongoSanitize({
 
 helmet({})
 
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    touchAfter: 24 * 60 * 60,  // how often to save the session -- in seconds
+    crypto: {
+        secret: 'secret'
+    }
+})
+
+store.on('error', function (e) {
+    console.log('session store error', e)
+})
+
+///configuration of session
 const sessionConfig = {
+    store, //store:store
     name: 'session',
     secret: 'secret', //remove deprecation warnings lol-- could be any other string, proabbly not in your main app ever.
     resave: false, //remove deprecation warnings lol
@@ -61,11 +80,12 @@ const sessionConfig = {
     cookie: {
         httpOnly: true, //extra security for the cookie, even if accessed by cross site scripting, they wouldn't get the cookie
         // secure: true, // this one only works with httpS - currently off because we haven't deployed and localhost isn't http
-        expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1000ms times 60s, times 60m, times 24hrs, times 7days - expires in a week.
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1000ms times 60s, times 60m, times 24hrs, times 7days - expires in a week. -- in ms
         maxAge: 1000 * 60 * 60 * 24 * 7,
     }
     // store: here is where we would specify where all of this iss saved. At the moment it's just a session
 }
+
 app.use(session(sessionConfig))
 app.use(flash())
 
