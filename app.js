@@ -6,11 +6,11 @@ if (process.env.NODE_ENV !== 'production') { //process.env.node_env is an enviro
 //main
 const express = require('express');
 const app = express();
-const path = require('path')
+const path = require('path') //allows me to use a default path name I can specify
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate'); // one of many engines used to run/parse ejs. this is the one we want to use rather than the default one
-const session = require('express-session');
-const flash = require('connect-flash');
+const session = require('express-session'); npm
+const flash = require('connect-flash'); //The flash is a special area of the session used for storing messages. Messages are written to the flash and cleared after being displayed to the user. 
 const methodOverride = require('method-override');
 const ExpressError = require('./utils/ExpressError');
 const passport = require('passport'); // regular passports, allows us to plug in multiple strategies for authentication
