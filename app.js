@@ -94,9 +94,8 @@ app.use(passport.session())// for persistent login sessions. This HAS to come AF
 passport.use(new LocalStrategy(User.authenticate()))//requiring User model. Im saying, use the local strategy we downloaded and the authentication method is going to be located int he User model. We didn't actually add it manually to the model it got added via the passport-local-mongoose thingy.
 passport.serializeUser(User.serializeUser())//telling passport how to serialise a user (refers to how we store data in a session)
 passport.deserializeUser(User.deserializeUser())//how to get the user out of that session
-
-
 //giving access to info added by passport//express-session and saving it on the session.
+
 app.use((req, res, next) => {
     // console.log(req.query)
     res.locals.success = req.flash('success'); //middleware for predefined messages that are at the moment saved on each of my routes. If there is anything in flash under 'success' I'll have access to it in an res.locals.success
