@@ -1,7 +1,7 @@
 body {
     height: 100vh;
     background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-        url("https://res.cloudinary.com/drrtkq22t/image/upload/v1669248093/Yelp%20Camp/tqyjafqbf1ivdvvigisv.jpg");
+        url("https://res.cloudinary.com/recipeb00k/image/upload/v1669248093/Yelp%20Camp/tqyjafqbf1ivdvvigisv.jpg");
     background-size: cover;
     background-position: center;
     text-shadow: 0 0.05rem rgba(0, 0, 0, 0.7);

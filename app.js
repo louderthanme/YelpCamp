@@ -24,13 +24,11 @@ const MongoStore = require('connect-mongo');
 
 const multer = require('multer') //middleware to handle multipart/farm-data in our forms
 const upload = multer({ dest: 'uploads/' }) //where the file will be saved, at the moment it's on this folder, irl you wouldn't save it on a computer you'd upload it to a server
-const dbUrl = process.env.dbUrl
+const dbUrl = process.env.DB_URL
 // mongoose.connect('mongodb://localhost:27017/yelp-camp');
 
 
 // connect- to web
-
-
 //mongo
 main().catch(err => console.log(`oh no mongo ${err}`));
 async function main() {
